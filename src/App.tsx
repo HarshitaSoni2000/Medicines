@@ -50,7 +50,7 @@ const AdminSettings = lazy(() => import('@/pages/admin/AdminSettings'))
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ScrollToTop />
       <Suspense fallback={<PageLoader />}>
         <Routes>
