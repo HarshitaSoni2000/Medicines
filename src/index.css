@@ -1,0 +1,66 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+@theme {
+  /* Brand palette — deep medical navy + single teal action color */
+  --color-navy-950: #0a1b2e;
+  --color-navy-900: #0f2338;
+  --color-navy-800: #163049;
+  --color-navy-700: #1e3f5f;
+  --color-navy-600: #2b537a;
+  --color-navy-500: #3d6a94;
+  --color-navy-100: #e4ecf3;
+  --color-navy-50: #f2f6f9;
+
+  --color-teal-700: #0a6e6c;
+  --color-teal-600: #0e8785;
+  --color-teal-500: #12a19e;
+  --color-teal-100: #d8f0ef;
+  --color-teal-50: #eef9f8;
+
+  --color-amber-600: #b5720a;
+  --color-amber-100: #fbeacc;
+
+  --color-red-600: #b3261e;
+  --color-red-100: #f7dedc;
+
+  --color-green-600: #1c7d4d;
+  --color-green-100: #dcf1e5;
+
+  --color-surface: #ffffff;
+  --color-bg: #f6f8fa;
+  --color-line: #dde4ea;
+
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-navy-950);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-teal-600);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-teal-100);
+}
+
+/* thin, calm scrollbars for data-dense tables */
+::-webkit-scrollbar { height: 8px; width: 8px; }
+::-webkit-scrollbar-thumb { background: var(--color-navy-100); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
