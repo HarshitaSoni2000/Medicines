@@ -8,7 +8,8 @@ import { Modal } from '@/components/ui/Modal'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { StatusBadge, stockLabel, stockTone } from '@/components/ui/StatusBadge'
 import { Pagination } from '@/components/ui/Pagination'
-import { medicines as initialMedicines, categories } from '@/data/medicines'
+import { categories } from '@/data/medicines'
+import { useInventory } from '@/features/inventory/InventoryContext'
 import type { Medicine } from '@/types'
 import { formatINR } from '@/lib/utils'
 import { useToast } from '@/components/ui/Toast'
@@ -16,7 +17,7 @@ import { useToast } from '@/components/ui/Toast'
 const PAGE_SIZE = 10
 
 export default function AdminProducts() {
-  const [medicines, setMedicines] = useState<Medicine[]>(initialMedicines)
+  const { medicines, addProduct, updateProduct, deleteProduct } = useInventory()
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('')
   const [page, setPage] = useState(1)
@@ -48,33 +49,10 @@ export default function AdminProducts() {
 
   function saveProduct(data: Partial<Medicine>) {
     if (editing) {
-      setMedicines((prev) => prev.map((m) => (m.id === editing.id ? { ...m, ...data } : m)))
+      updateProduct(editing.id, data)
       push('Product updated')
     } else {
-      const id = `med-new-${Date.now()}`
-      setMedicines((prev) => [
-        {
-          id,
-          name: data.name ?? 'New Medicine',
-          composition: data.composition ?? '',
-          manufacturer: data.manufacturer ?? '',
-          category: data.category ?? 'OTC Products',
-          dosageForm: data.dosageForm ?? 'Tablet',
-          packSize: data.packSize ?? '',
-          mrp: data.mrp ?? 0,
-          wholesalePrice: data.wholesalePrice ?? 0,
-          discountPercent: data.discountPercent ?? 0,
-          stockQuantity: data.stockQuantity ?? 0,
-          stockStatus: (data.stockQuantity ?? 0) > 20 ? 'in-stock' : (data.stockQuantity ?? 0) > 0 ? 'low-stock' : 'out-of-stock',
-          minOrderQty: data.minOrderQty ?? 5,
-          prescriptionRequired: data.prescriptionRequired ?? false,
-          sku: `TM-NEW-${prev.length + 1}`,
-          batch: { batchNumber: 'B0000', manufacturingDate: '2026-01-01', expiryDate: '2028-01-01', quantity: data.stockQuantity ?? 0 },
-          expiryStatus: 'ok',
-          description: data.description ?? '',
-        },
-        ...prev,
-      ])
+      addProduct(data)
       push('Product added')
     }
     setModalOpen(false)
@@ -134,7 +112,9 @@ export default function AdminProducts() {
                 <td className="px-5 py-3 text-navy-700">{m.category}</td>
                 <td className="px-5 py-3 font-mono text-navy-700">{formatINR(m.mrp)}</td>
                 <td className="px-5 py-3 font-mono text-navy-950">{formatINR(m.wholesalePrice)}</td>
-                <td className="px-5 py-3"><StatusBadge label={stockLabel(m.stockStatus)} tone={stockTone(m.stockStatus)} /></td>
+                <td className="px-5 py-3">
+                  <StatusBadge label={`${stockLabel(m.stockStatus)} · ${m.stockQuantity}`} tone={stockTone(m.stockStatus)} />
+                </td>
                 <td className="px-5 py-3">
                   <div className="flex items-center gap-2">
                     <button onClick={() => openEdit(m)} className="text-navy-500 hover:text-teal-700" aria-label="Edit"><Pencil className="h-4 w-4" /></button>
@@ -158,7 +138,7 @@ export default function AdminProducts() {
         danger
         onCancel={() => setDeleting(null)}
         onConfirm={() => {
-          setMedicines((prev) => prev.filter((m) => m.id !== deleting!.id))
+          deleteProduct(deleting!.id)
           push('Product deleted')
           setDeleting(null)
         }}

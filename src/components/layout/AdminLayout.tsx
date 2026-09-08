@@ -13,12 +13,14 @@ import {
   LifeBuoy,
   Settings,
   LogOut,
+  Receipt,
 } from 'lucide-react'
 import { Sidebar, type SidebarItem } from './Sidebar'
 import { InternalTopbar } from './InternalTopbar'
 
 const items: SidebarItem[] = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/admin/billing', label: 'Billing', icon: Receipt },
   { to: '/admin/orders', label: 'Orders', icon: ClipboardList },
   { to: '/admin/products', label: 'Products', icon: Pill },
   { to: '/admin/categories', label: 'Categories', icon: FolderTree },

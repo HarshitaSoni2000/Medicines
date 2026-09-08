@@ -1,8 +1,10 @@
 import { PageHeader } from '@/components/shared/PageHeader'
-import { categories, medicines } from '@/data/medicines'
+import { categories } from '@/data/medicines'
 import { categoryIcon } from '@/utils/category'
+import { useInventory } from '@/features/inventory/InventoryContext'
 
 export default function AdminCategories() {
+  const { medicines } = useInventory()
   return (
     <div>
       <PageHeader title="Categories" subtitle={`${categories.length} categories`} />

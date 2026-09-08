@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { Search } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
-import { medicines as initialMedicines } from '@/data/medicines'
-import type { Medicine } from '@/types'
+import { useInventory } from '@/features/inventory/InventoryContext'
 import { useToast } from '@/components/ui/Toast'
 
 export default function AdminPricing() {
-  const [medicines, setMedicines] = useState<Medicine[]>(initialMedicines)
+  const { medicines, updateProduct } = useInventory()
   const [query, setQuery] = useState('')
   const { push } = useToast()
 
@@ -15,10 +14,7 @@ export default function AdminPricing() {
   )
 
   function updatePrice(id: string, field: 'mrp' | 'wholesalePrice', value: number) {
-    setMedicines((prev) => prev.map((m) => (m.id === id ? { ...m, [field]: value } : m)))
-  }
-
-  function commit(id: string) {
+    updateProduct(id, { [field]: value })
     push('Pricing updated')
   }
 
@@ -55,7 +51,7 @@ export default function AdminPricing() {
                     <input
                       type="number"
                       defaultValue={m.mrp}
-                      onBlur={(e) => { updatePrice(m.id, 'mrp', Number(e.target.value)); commit(m.id) }}
+                      onBlur={(e) => updatePrice(m.id, 'mrp', Number(e.target.value))}
                       className="h-8 w-24 rounded-[4px] border border-navy-100 px-2 font-mono text-[13px] focus:border-teal-500 focus:outline-none"
                     />
                   </td>
@@ -63,7 +59,7 @@ export default function AdminPricing() {
                     <input
                       type="number"
                       defaultValue={m.wholesalePrice}
-                      onBlur={(e) => { updatePrice(m.id, 'wholesalePrice', Number(e.target.value)); commit(m.id) }}
+                      onBlur={(e) => updatePrice(m.id, 'wholesalePrice', Number(e.target.value))}
                       className="h-8 w-24 rounded-[4px] border border-navy-100 px-2 font-mono text-[13px] focus:border-teal-500 focus:outline-none"
                     />
                   </td>

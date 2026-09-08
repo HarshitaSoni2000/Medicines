@@ -21,10 +21,6 @@ npm run build      # production build
 npm run preview    # preview production build
 ```
 
-## Deploy to GitHub Pages
-
-Push to the `main` or `master` branch, then set **Settings > Pages > Build and deployment > Source** to **GitHub Actions**. The workflow builds and deploys the `dist/` directory. Do not deploy the repository root directly, because it contains the TypeScript source entry rather than browser-ready JavaScript.
-
 ## What's included
 
 **Public site** — Home, Medicine Catalog (search/filter/sort/pagination), Categories,

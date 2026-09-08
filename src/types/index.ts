@@ -125,3 +125,28 @@ export interface SupportTicket {
   status: 'Open' | 'Resolved'
   createdAt: string
 }
+
+export interface BillItem {
+  medicineId: string
+  name: string
+  packSize: string
+  quantity: number
+  unitPrice: number
+  total: number
+}
+
+export type PaymentMode = 'Cash' | 'UPI' | 'Card' | 'Credit'
+
+export interface Bill {
+  id: string
+  billNumber: string
+  date: string
+  customerName: string
+  customerPhone: string
+  items: BillItem[]
+  subtotal: number
+  discount: number
+  tax: number
+  grandTotal: number
+  paymentMode: PaymentMode
+}

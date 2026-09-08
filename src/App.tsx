@@ -36,6 +36,7 @@ const Support = lazy(() => import('@/pages/dashboard/Support'))
 
 // Admin
 const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'))
+const AdminBilling = lazy(() => import('@/pages/admin/AdminBilling'))
 const AdminOrders = lazy(() => import('@/pages/admin/AdminOrders'))
 const AdminProducts = lazy(() => import('@/pages/admin/AdminProducts'))
 const AdminCategories = lazy(() => import('@/pages/admin/AdminCategories'))
@@ -50,7 +51,7 @@ const AdminSettings = lazy(() => import('@/pages/admin/AdminSettings'))
 
 function App() {
   return (
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <BrowserRouter>
       <ScrollToTop />
       <Suspense fallback={<PageLoader />}>
         <Routes>
@@ -85,6 +86,7 @@ function App() {
 
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
+            <Route path="billing" element={<AdminBilling />} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="products" element={<AdminProducts />} />
             <Route path="categories" element={<AdminCategories />} />

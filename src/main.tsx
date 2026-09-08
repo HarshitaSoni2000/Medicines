@@ -8,6 +8,8 @@ import { AuthProvider } from '@/features/auth/AuthContext'
 import { CartProvider } from '@/features/cart/CartContext'
 import { WishlistProvider } from '@/features/wishlist/WishlistContext'
 import { SavedCartsProvider } from '@/features/cart/SavedCartsContext'
+import { InventoryProvider } from '@/features/inventory/InventoryContext'
+import { BillingProvider } from '@/features/billing/BillingContext'
 
 const queryClient = new QueryClient()
 
@@ -16,13 +18,17 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
         <AuthProvider>
-          <CartProvider>
-            <WishlistProvider>
-              <SavedCartsProvider>
-                <App />
-              </SavedCartsProvider>
-            </WishlistProvider>
-          </CartProvider>
+          <InventoryProvider>
+            <BillingProvider>
+              <CartProvider>
+                <WishlistProvider>
+                  <SavedCartsProvider>
+                    <App />
+                  </SavedCartsProvider>
+                </WishlistProvider>
+              </CartProvider>
+            </BillingProvider>
+          </InventoryProvider>
         </AuthProvider>
       </ToastProvider>
     </QueryClientProvider>

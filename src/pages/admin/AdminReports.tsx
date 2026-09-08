@@ -6,7 +6,7 @@ import { Select } from '@/components/ui/Select'
 import { Button } from '@/components/ui/Button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
 import { salesTrend, categoryPerformance, topSelling } from '@/data/admin'
-import { medicines } from '@/data/medicines'
+import { useInventory } from '@/features/inventory/InventoryContext'
 import { formatINR } from '@/lib/utils'
 import { useToast } from '@/components/ui/Toast'
 
@@ -18,6 +18,7 @@ const reportTypes = [
 export default function AdminReports() {
   const [report, setReport] = useState(reportTypes[0])
   const { push } = useToast()
+  const { medicines } = useInventory()
   const lowStock = medicines.filter((m) => m.stockStatus === 'low-stock' || m.stockStatus === 'out-of-stock')
   const nearExpiry = medicines.filter((m) => m.expiryStatus !== 'ok')
 

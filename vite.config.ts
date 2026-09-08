@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 import path from 'path'
 
 export default defineConfig({
-  base: '/Medicines/',
+  base: './',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

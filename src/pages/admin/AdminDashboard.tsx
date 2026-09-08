@@ -1,30 +1,47 @@
+import { Link } from 'react-router-dom'
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
-import { IndianRupee, ClipboardList, Clock, Users, Pill, TriangleAlert } from 'lucide-react'
+import { IndianRupee, Clock, Users, Pill, TriangleAlert, Receipt } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatCard } from '@/components/ui/StatCard'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
+import { Button } from '@/components/ui/Button'
 import { salesTrend, categoryPerformance, topSelling } from '@/data/admin'
 import { orders } from '@/data/orders'
-import { medicines } from '@/data/medicines'
+import { useInventory } from '@/features/inventory/InventoryContext'
+import { useBilling } from '@/features/billing/BillingContext'
 import { formatINR } from '@/lib/utils'
 
 export default function AdminDashboard() {
+  const { medicines } = useInventory()
+  const { bills } = useBilling()
   const totalSales = salesTrend.reduce((s, d) => s + d.sales, 0)
-  const ordersToday = salesTrend[salesTrend.length - 1].orders
   const pendingOrders = orders.filter((o) => o.status === 'Pending').length
   const lowStock = medicines.filter((m) => m.stockStatus === 'low-stock' || m.stockStatus === 'out-of-stock').length
+  const stockValue = medicines.reduce((s, m) => s + m.stockQuantity * m.wholesalePrice, 0)
+  const todayStr = new Date().toDateString()
+  const todaysBillingSales = bills
+    .filter((b) => new Date(b.date).toDateString() === todayStr)
+    .reduce((s, b) => s + b.grandTotal, 0)
 
   return (
     <div>
-      <PageHeader title="Admin Dashboard" subtitle="Overview of sales, orders and inventory" />
+      <PageHeader
+        title="Admin Dashboard"
+        subtitle="Overview of sales, orders and inventory"
+        actions={
+          <Link to="/admin/billing">
+            <Button size="sm"><Receipt className="h-3.5 w-3.5" /> New Bill</Button>
+          </Link>
+        }
+      />
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
         <StatCard label="Total Sales" value={formatINR(totalSales)} icon={<IndianRupee className="h-4 w-4" />} tone="teal" />
-        <StatCard label="Orders Today" value={String(ordersToday)} icon={<ClipboardList className="h-4 w-4" />} />
+        <StatCard label="Today's Billing" value={formatINR(todaysBillingSales)} icon={<Receipt className="h-4 w-4" />} />
         <StatCard label="Pending Orders" value={String(pendingOrders)} icon={<Clock className="h-4 w-4" />} tone="amber" />
+        <StatCard label="Stock Value" value={formatINR(stockValue)} icon={<Pill className="h-4 w-4" />} />
+        <StatCard label="Low / Out of Stock" value={String(lowStock)} icon={<TriangleAlert className="h-4 w-4" />} tone="red" />
         <StatCard label="Customers" value="6" icon={<Users className="h-4 w-4" />} />
-        <StatCard label="Products" value={String(medicines.length)} icon={<Pill className="h-4 w-4" />} />
-        <StatCard label="Low Stock Items" value={String(lowStock)} icon={<TriangleAlert className="h-4 w-4" />} tone="red" />
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
